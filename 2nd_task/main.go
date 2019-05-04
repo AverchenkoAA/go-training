@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	var list collection.ListNode
+	var list collection.List
 	list.Add("Mike")
 	list.Add("Bill")
 	list.Add("Lolly")
