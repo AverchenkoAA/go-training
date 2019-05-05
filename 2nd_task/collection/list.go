@@ -41,13 +41,10 @@ func (n *List) Remove(index int){
 //Get - возвращает элемент с данным индексом из коллекции
 func (n *List) Get(index int) *ListNode{
 	e:=n.firstEl
-	if (index>=0)&&(index<n.count){
 		for i:=0;i<index;i++{
 			e=e.Next()
 		}
 		return e
-	}
-	return nil
 }
 //First – возвращает первый элемент в коллекции
 func (n *List) First() *ListNode{
