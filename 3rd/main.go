@@ -31,28 +31,12 @@ func createBot(language string) (bots.Bot, error){
 }
 func listenUser(b bots.Bot){
 	var mess string
-	for mess!="5"{
+	for {
 		fmt.Scanln(&mess)
-		switch mess{
-			case "1":
-				fmt.Println(b.Hello())
-			
-			case "2":
-				fmt.Println(b.Time())
-			
-			case "3":
-				fmt.Println(b.Date())
-			
-			case "4":
-				fmt.Println(b.Weekday())
+		fmt.Println(b.Command(mess))
 
-			case "5":
-				fmt.Println(b.Bye())
-				break
-
-			default:
-				fmt.Println("There are not such command. Try again.")
+		if mess==b.ExitWord(){
+			break
 		}
 	}
-
 }
