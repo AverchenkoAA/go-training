@@ -9,7 +9,7 @@ type WeatherWind struct {
 
 func (w *WeatherWind) GetWindDirection() string {
 	switch {
-	case ((w.Deg < 30) && (w.Deg > 0)) || ((w.Deg < 360) && (w.Deg > 330)):
+	case ((w.Deg < 30) && (w.Deg > 0)) || ((w.Deg <= 360) && (w.Deg > 330)):
 		{
 			return "северный"
 		}
