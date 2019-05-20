@@ -6,23 +6,27 @@ import (
 )
 
 func main() {
+	var meteo weather.Meteorologist
+	var wfc weather.WeatherForecast
+
 	//Mahilyow, Rome, Madrid, Paris, London, Brasilia, Calgary, Sydney, Tokio, Moscow, Oslo, Murmansk
 	var cities = []string{
 		"Mahilyow",
-		"Rome", 
+		"Rome",
 		"Madrid",
 		"Paris",
-		"London", 
-		"Brasilia", 
-		"Calgary", 
-		"Sydney", 
+		"London",
+		"Brasilia",
+		"Calgary",
+		"Sydney",
 		"Tokio",
 		"Moscow",
-		"Oslo", 
+		"Oslo",
 		"Murmansk",
-		}
-	var meteo weather.Meteorologist
-	for _,city:=range cities{
-		fmt.Println("\n"+meteo.WF.FormatWeather(meteo.GetWeather(city)))
+	}
+
+	for _, city := range cities {
+		weath := meteo.GetWeather(city)
+		fmt.Println("\n" + wfc.FormatWeather(weath))
 	}
 }

@@ -8,9 +8,7 @@ import (
 	"net/http"
 )
 
-type Meteorologist struct {
-	WF WeatherForecast
-}
+type Meteorologist struct{}
 
 func (m *Meteorologist) GetWeather(city string) Weather {
 	url := "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&lang=ru&units=metric&appid=2c19a8c670afc70f2ae7a81f229fce3d"
