@@ -1,7 +1,7 @@
 package match
 
 import (
-	"fmt"
+	//"fmt"
 	"sync"
 )
 
@@ -9,12 +9,13 @@ type Player struct {
 	Name  string
 	Skill int
 }
-func (p *Player) Play(wg *sync.WaitGroup, c chan int) {
+func (p *Player) Play(wg *sync.WaitGroup, c chan int, w chan *Player){
 	defer wg.Done()
 	for {
 		ball, ok := <-c
 		if !ok {
-			fmt.Printf("\n%v won the match!", p.Name)
+			//fmt.Printf("\n%v won the match!", p.Name)
+			w<-p
 			break
 		}
 		if ball <= p.Skill {
