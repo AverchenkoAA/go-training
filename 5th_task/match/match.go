@@ -6,35 +6,93 @@ import (
 	"sync"
 	"fmt"
 )
-type TennisMatch struct {
+type Match struct {
 	Player1, Player2 Player
-	//Score int
+	MatchScore []PlayerScore
 }
 
 var RandBall *rand.Rand
 
 func init(){
-	S3 := rand.NewSource(time.Now().UnixNano())
-	RandBall = rand.New(S3)
+	r := rand.NewSource(time.Now().UnixNano())
+	RandBall = rand.New(r)
 }
-func (tm *TennisMatch) Start(wg *sync.WaitGroup){
+
+func (tm *Match) start(){
+	var wg sync.WaitGroup
+	wg.Add(2)
+
 	c := make(chan int)
 	winner := make(chan *Player)
 
-	go tm.Player1.Play(wg,c,winner)
-	go tm.Player2.Play(wg,c,winner)
+	go tm.Player1.Play(&wg,c,winner)
+	go tm.Player2.Play(&wg,c,winner)
 
 	c <- RandBall.Intn(100)
 	
 	for {
 		w, ok := <-winner
 		if w!=nil {
-			fmt.Printf("\n%v won the match!",w.Name)
+			w.PlayerScore+=15
 			close(winner)
 		} 
 		if !ok {
 			break
 		}		
 	}
+	wg.Wait()
+}
 
+func (tm *Match) playGame(){
+	
+	for (tm.Player1.PlayerScore<40) && (tm.Player2.PlayerScore<40){
+		tm.start()
+	}
+	winner:=tm.getWinner(tm.Player1.PlayerScore,tm.Player2.PlayerScore)
+	winner.PlayerGames++
+}
+
+func (tm *Match) playSet(){
+	for (tm.Player1.PlayerGames<6) && (tm.Player2.PlayerGames<6){
+		tm.playGame()
+		tm.clearPlayerScore()
+	}
+	winner:=tm.getWinner(tm.Player1.PlayerGames,tm.Player2.PlayerGames)
+	winner.PlayerSets++
+	setScore:=PlayerScore{tm.Player1.PlayerGames,tm.Player2.PlayerGames}
+	tm.MatchScore=append(tm.MatchScore,setScore)
+}
+
+func (tm *Match) PlayMatch(){
+	for (tm.Player1.PlayerSets<2) && (tm.Player2.PlayerSets<2){
+		tm.playSet()
+		tm.clearPlayerScore()
+		tm.Player1.PlayerGames=0
+		tm.Player2.PlayerGames=0
+	}
+	tm.printWinner()
+}
+
+func(tm *Match) clearPlayerScore(){
+		tm.Player1.PlayerScore=0
+		tm.Player2.PlayerScore=0
+}
+
+func(tm *Match) getWinner(score1, score2 int) *Player{
+	if (score1)>(score2){
+		return &tm.Player1
+	}
+		return &tm.Player2
+}
+
+func(tm *Match) printWinner(){
+	fmt.Printf("\n%v: ",tm.Player1.Name)
+	for _,set:= range tm.MatchScore{
+		fmt.Printf("%v ",set.PlayerScore1)
+	}
+
+	fmt.Printf("\n%v: ",tm.Player2.Name)
+	for _,set:= range tm.MatchScore{
+		fmt.Printf("%v ",set.PlayerScore2)
+	}
 }

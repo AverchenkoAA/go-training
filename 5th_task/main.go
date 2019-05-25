@@ -2,18 +2,12 @@ package main
 
 import (
 	"5th_task/match"
-	"sync"
 )
 
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(2)
-	pl1 := match.Player{Name: "Pl1", Skill: 72}
-	pl2 := match.Player{Name: "Pl2", Skill: 72}
+	pl1 := match.Player{Name: "Pl1", Skill: 98}
+	pl2 := match.Player{Name: "Pl2", Skill: 98}
 
-	m:=match.TennisMatch{pl1,pl2}
-	m.Start(&wg)
-
-	wg.Wait()  
-
+	m:=match.Match{Player1: pl1, Player2: pl2}
+	m.PlayMatch()
 }
